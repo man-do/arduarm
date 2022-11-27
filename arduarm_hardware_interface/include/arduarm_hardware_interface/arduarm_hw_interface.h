@@ -4,6 +4,7 @@
 #include <ros_control_boilerplate/generic_hw_interface.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Int32MultiArray.h>
+#include <sensor_msgs/JointState.h>
 
 namespace arduarm_hardware_interface
 {
@@ -19,13 +20,13 @@ public:
 
   virtual void enforceLimits(ros::Duration& period);
 
-  void callback(const std_msgs::Int32MultiArray::ConstPtr&);
+  void callback(const sensor_msgs::JointState::ConstPtr&);
 
 private:
   ros::Publisher cmd_pub;
   ros::Subscriber state_sub;
-  std_msgs::Int32MultiArray cmds;
-  std_msgs::Int32MultiArray states;  
+  sensor_msgs::JointState cmds;
+  sensor_msgs::JointState states;  
 };
 
 }
