@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arduarm">
+
+    <!-- Includes -->
+    <xacro:include filename='$(find arduarm_description)/urdf/macros.xacro' />
+    <xacro:include filename="$(find arduarm_description)/urdf/arduarm_properties.xacro" />
+    <xacro:include filename="$(find arduarm_description)/urdf/materials.xacro" />
+    <xacro:include filename="$(find arduarm_description)/urdf/gazebo_properties.xacro" />
+    <xacro:include filename="$(find arduarm_description)/urdf/gazebo_plugins.xacro" />
+
+    <link name='world' />
+    <joint name="fixed" type="fixed">
+        <parent link="world" />
+        <child link="base_link" />
+    </joint>
+
+    <!-- Base Link -->
+    <link name="base_link">
+        <collision>
+            <origin xyz="0 0 ${base_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${base_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}" />
+            </geometry>
+            <material name="brown" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${base_height/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${base_width}" height="${height1}" />
+        </inertial>
+    </link>
+
+    <!-- base_servo1_joint -->
+    <joint name="base_servo1_joint" type="fixed">
+        <origin xyz="0 0 ${base_height}" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="servo1" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <!-- servo1 -->
+    <link name="servo1">
+        <collision>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+            <material name="blue" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${servo_width}" height="${height1}" />
+        </inertial>
+
+    </link>
+
+    <!-- servo1_link1_joint -->
+    <joint name="servo1_link1_joint" type="revolute">
+        <origin xyz="0 0 ${servo_height}" rpy="0 0 0" />
+        <parent link="servo1" />
+        <child link="link1" />
+        <axis xyz="0 0 1" />
+
+        <limit effort="1000" velocity="0.5" lower="-${PI/2}" upper="${PI/2}" />
+    </joint>
+
+    <!-- Link 1 -->
+    <link name="link1">
+        <collision>
+            <origin xyz="0 0 ${height1/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length1} ${width1} ${height1}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${height1/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length1} ${width1} ${height1}" />
+            </geometry>
+            <material name="orange" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${height1/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${width1}" height="${height1}" />
+        </inertial>
+
+    </link>
+
+
+    <!-- link1_servo2_joint -->
+    <joint name="link1_servo2_joint" type="fixed">
+        <origin xyz="0 ${width1/2} ${height1 - servo_height/2}" rpy="0 ${PI/2} ${PI/2}" />
+        <parent link="link1" />
+        <child link="servo2" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+    <!-- servo2 -->
+    <link name="servo2">
+        <collision>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+            <material name="blue" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${servo_width}" height="${height1}" />
+        </inertial>
+
+    </link>
+
+    <!-- servo2_link2_joint -->
+    <joint name="servo2_link2_joint" type="revolute">
+        <origin xyz="${servo_width/2-axel_offset} 0 ${servo_height+length2/2}" rpy="${PI/2} 0 -${PI/2}" />
+        <parent link="servo2" />
+        <child link="link2" />
+        <axis xyz="0 1 0" />
+        <limit effort="1000" velocity="0.5" lower="-${PI/2}" upper="${PI/2}" />
+    </joint>
+
+    <!-- Link 2 -->
+    <link name="link2">
+        <collision>
+            <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length2} ${width2} ${height2}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length2} ${width2} ${height2}" />
+            </geometry>
+            <material name="orange" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${height2/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${width2}" height="${height2}" />
+        </inertial>
+    </link>
+
+    <!-- link2_servo3_joint -->
+    <joint name="link2_servo3_joint" type="fixed">
+        <origin xyz="0 ${width2/2} ${height2 - servo_height/2}" rpy="0 ${PI/2} ${PI/2}" />
+        <parent link="link2" />
+        <child link="servo3" />
+        <axis xyz="1 0 0" />
+    </joint>
+
+    <!-- servo3 -->
+    <link name="servo3">
+        <collision>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${servo_length} ${servo_width} ${servo_height}" />
+            </geometry>
+            <material name="blue" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${servo_height/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${servo_width}" height="${height1}" />
+        </inertial>
+
+    </link>
+
+    <!-- servo3_link3_joint -->
+    <joint name="servo3_link3_joint" type="revolute">
+        <origin xyz="${servo_width/2 - axel_offset} 0 ${servo_height + length2/2}" rpy="${PI/2} 0 -${PI/2}" />
+        <parent link="servo3" />
+        <child link="link3" />
+        <axis xyz="0 1 0" />
+
+        <limit effort="1000" velocity="0.5" lower="-${PI/2}" upper="${PI/2}" />
+    </joint>
+
+    <!-- Link 3 -->
+    <link name="link3">
+        <collision>
+            <origin xyz="0 0 ${height3/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length3} ${width3} ${height3}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 ${height3/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${length3} ${width3} ${height3}" />
+            </geometry>
+            <material name="orange" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${height3/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${width3}" height="${height3}" />
+        </inertial>
+    </link>
+
+    <!-- link3_end_effector_joint -->
+    <joint name="link3_end_effector_joint" type="fixed">
+        <origin xyz="0 0 ${height3}" rpy="0 0 0" />
+        <parent link="link3" />
+        <child link="end_effector" />
+        <axis xyz="0 1 0" />
+    </joint>
+
+    <!-- Link 3 -->
+    <link name="end_effector">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${width1} ${width1} ${width1}" />
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${width1} ${width1} ${width1}" />
+            </geometry>
+            <material name="green" />
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${height3/2}" rpy="0 0 0" />
+            <mass value="${mass}" />
+            <xacro:box_inertia mass="${mass}" width="${width3}" height="${height3}" />
+        </inertial>
+    </link>
+
+</robot>

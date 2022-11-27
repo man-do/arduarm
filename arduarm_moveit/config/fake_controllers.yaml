@@ -1,0 +1,14 @@
+controller_list:
+  - name: fake_arduarm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - servo1_link1_joint
+      - servo2_link2_joint
+      - servo3_link3_joint
+  - name: fake_end_effector_controller
+    type: $(arg fake_execution_type)
+    joints:
+      []
+initial:  # Define initial robot poses per group
+  - group: arduarm
+    pose: home

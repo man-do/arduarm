@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- GDB functionality -->
+  <arg name="debug" default="false" />
+  <arg name="rqt" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <!-- Load example URDF -->
+  <param
+    name="robot_description"
+    command="$(find xacro)/xacro '$(find arduarm_description)/urdf/arduarm.xacro'" />
+
+  <group ns="arduarm">
+    <!-- Load hardware interface -->
+    <node
+      name="arduarm_hardware_interface"
+      pkg="arduarm_hardware_interface"
+      type="arduarm_hw_main"
+      output="screen"
+      launch-prefix="$(arg launch_prefix)" />
+
+    <!-- Load controller settings -->
+    <rosparam
+      file="$(find arduarm_hardware_interface)/config/arduarm_controllers.yaml"
+      command="load" />
+
+    <!-- Load controller manager -->
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+      output="screen" args="
+        spawn 
+        joint_state_controller 
+        joint_position_controller" />
+
+    <!-- Convert joint states to /tf tranforms -->
+    <node
+      name="robot_state_publisher"
+      pkg="robot_state_publisher"
+      type="robot_state_publisher" />
+
+    <!-- Setup serial connection with Arduino -->
+    <node
+      name="serial_connection"
+      pkg="rosserial_python"
+      type="serial_node.py"
+      args="_port:=/dev/ttyACM0 _baud:=115200" />
+
+    <group if="$(arg rqt)">
+      <node
+        name="rqt"
+        pkg="rqt_gui"
+        type="rqt_gui" />
+    </group>
+  </group>
+
+</launch>

@@ -1,0 +1,3 @@
+controller_list:
+  [arm_position_controller, 
+  joint_state_controller]

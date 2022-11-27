@@ -1,0 +1,22 @@
+arm_position_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - servo1_link1_joint
+    - servo2_link2_joint
+    - servo3_link3_joint
+  gains:
+    servo1_link1_joint:
+      p: 5
+      d: 0.0
+      i: 0.01
+      i_clamp: 1
+    servo2_link2_joint:
+      p: 5
+      d: 0.0
+      i: 0.01
+      i_clamp: 1
+    servo3_link3_joint:
+      p: 5
+      d: 0.0
+      i: 0.01
+      i_clamp: 1
