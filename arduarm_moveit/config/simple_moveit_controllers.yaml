@@ -1,3 +1,9 @@
 controller_list:
-  [arm_position_controller, 
-  joint_state_controller]
+  - name: arm_position_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - servo1_link1_joint
+      - servo2_link2_joint
+      - servo3_link3_joint

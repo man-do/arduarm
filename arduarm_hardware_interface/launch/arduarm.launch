@@ -1,0 +1,15 @@
+<launch>
+
+    <include file="$(find arduarm_hardware_interface)/launch/arduarm_hardware.launch" />
+
+    <include file="$(find arduarm_moveit)/launch/move_group.launch">
+        <arg name="moveit_controller_manager" value="ros_control" />
+        <remap from="/arduarm/joint_states" to="/joint_states"/>
+    </include>
+
+    <!-- Run Rviz and load the default config to see the state of the move_group node -->
+    <include file="$(find arduarm_moveit)/launch/moveit_rviz.launch">
+        <arg name="rviz_config" value="$(find arduarm_hardware_interface)/config/moveit.rviz" />
+    </include>
+
+</launch>

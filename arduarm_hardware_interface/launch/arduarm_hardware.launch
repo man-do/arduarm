@@ -12,7 +12,7 @@
     name="robot_description"
     command="$(find xacro)/xacro '$(find arduarm_description)/urdf/arduarm.xacro'" />
 
-  <group ns="arduarm">
+  <group ns="/">
     <!-- Load hardware interface -->
     <node
       name="arduarm_hardware_interface"
@@ -31,13 +31,17 @@
       output="screen" args="
         spawn 
         joint_state_controller 
-        joint_position_controller" />
+        arm_position_controller" />
+
+    <!-- joint_position_controller -->
 
     <!-- Convert joint states to /tf tranforms -->
     <node
       name="robot_state_publisher"
       pkg="robot_state_publisher"
-      type="robot_state_publisher" />
+      type="robot_state_publisher">
+      <!-- <remap from="joint_states" to="arduarm/joint_states" /> -->
+    </node>
 
     <!-- Setup serial connection with Arduino -->
     <node

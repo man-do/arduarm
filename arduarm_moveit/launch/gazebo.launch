@@ -13,7 +13,7 @@
   </include>
 
   <!-- send robot urdf to param server -->
-  <param name="robot_description" command="xacro  '$(find arduarm_description)/urdf/arduarm.xacro'" />
+  <param name="robot_description" textfile="$(find arduarm_moveit)/config/gazebo_arduarm.urdf" />
 
   <!-- unpause only after loading robot model -->
   <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
